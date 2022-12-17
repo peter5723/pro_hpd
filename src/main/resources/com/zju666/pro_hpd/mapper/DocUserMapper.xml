@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zju666.pro_hpd.mapper.DocUserMapper">
+<!-- List<DocUser> selectAllUser();-->
+<select id="selectAllUser" resultType="com.zju666.pro_hpd.pojo.DocUser">
+    SELECT * FROM doc_user
+</select>
+<!-- DocUser selectById(Integer Id); --> 
+<select id="selectById" resultType="com.zju666.pro_hpd.pojo.DocUser">
+    SELECT * FROM doc_user WHERE id = #{id}; 
+</select>
+<!-- int insert(DocUser docUser);-->
+<insert id="insert">
+    INSERT INTO doc_user (id, username, password) VALUES (#{id},#{username},#{password}); 
+</insert>
+<!--  int delete(Integer id);-->
+<delete id="delete">
+    DELETE FROM doc_user WHERE id = #{id};
+</delete>
+<!--   int update(DocUser docUser); 注意SQL语法 -->
+<update id="update">
+    UPDATE doc_user 
+        SET username = #{username}, password = #{password} 
+        WHERE id = #{id}
+</update>
+</mapper>
