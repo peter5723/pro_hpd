@@ -1,13 +1,17 @@
 package com.zju666.pro_hpd.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
+
+import com.zju666.pro_hpd.pojo.DocFile;
 //对应的数据库操作接口
 public interface DocDbService {
-    public void insertRecord(String username, MultipartFile file);
+    public void insertRecord(String username,String url, MultipartFile file);
 
-    public void selectByName(String DocName);
+    public DocFile selectByName(String docName);
     
-    public void selectAll();
+    public List<DocFile> selectAll();
 
-    public void deleteByName(String DocName);
+    public void  deleteByName(String docName);
 }

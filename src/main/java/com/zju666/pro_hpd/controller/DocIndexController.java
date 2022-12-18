@@ -1,7 +1,10 @@
 package com.zju666.pro_hpd.controller;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.ibatis.jdbc.Null;
 import org.apache.tomcat.jni.FileInfo;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.zju666.pro_hpd.pojo.DocFile;
+import com.zju666.pro_hpd.service.DocDbService;
 import com.zju666.pro_hpd.service.FilesStorageService;
 
 @Controller
@@ -28,6 +32,9 @@ public class DocIndexController {
 
     @Autowired
     FilesStorageService storageService;
+
+    @Autowired
+    DocDbService docDbService;
 
     @GetMapping("/doc_index")
     public String homepage() {
@@ -45,9 +52,14 @@ public class DocIndexController {
 
         try {
             storageService.save(file);
-
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            Path path = Paths.get(file.getOriginalFilename());
+            String url = MvcUriComponentsBuilder.fromMethodName(DocIndexController.class, 
+            "getFile", path.getFileName().toString()).build().toString();
+            docDbService.insertRecord("admin", url, file);
+            
             model.addAttribute("message", message);
+            
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
             model.addAttribute("message", message);
@@ -61,18 +73,12 @@ public class DocIndexController {
     public String getListFiles(Model model) {
         // List<DocFile> fileInfos = storageService.loadAll().map(path -> {
         //     String filename = path.getFileName().toString();
-        //     String url = MvcUriComponentsBuilder
-        //             .fromMethodName(DocIndexController.class, "getFile", path.getFileName().toString()).build()
-        //             .toString();
-
-        //     return new DocFile(filename, url);//TODO 到时候改一下，因为大概率不用这种方式了
+        //     String url = MvcUriComponentsBuilder.fromMethodName(DocIndexController.class, "getFile", path.getFileName().toString()).build().toString();
+        //     return new DocFile(filename, url);
         // }).collect(Collectors.toList());
-
-        // model.addAttribute("files", fileInfos);
-
-        // return "files";
-        return null;
-
+        List<DocFile> fileInfos = docDbService.selectAll();
+        model.addAttribute("files", fileInfos);
+        return "files";
     }
 
     @GetMapping("/files/{filename:.+}")
