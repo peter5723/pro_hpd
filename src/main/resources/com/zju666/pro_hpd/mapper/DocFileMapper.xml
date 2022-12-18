@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zju666.pro_hpd.mapper.DocFileMapper">
+    <!-- List<DocFile> selectAllFile();-->
+        <select id="selectAllFile" resultType="com.zju666.pro_hpd.pojo.DocFile">
+            SELECT * FROM doc_file;
+        </select>   
+
+    <!--    DocFile selectByName(String docname);-->
+    <select id="selectByName" resultType="com.zju666.pro_hpd.pojo.DocFile">
+        SELECT * FROM doc_file WHERE docname = #{docname}; 
+    </select>
+    <!--    void insertRecord(DocFile docFile);-->
+    <insert id="insertRecord">
+        INSERT INTO doc_file (id, docname, url, username, pass, size) VALUES (#{id},#{docname},#{url},#{username},#{pass},#{size}); 
+    </insert>
+    <!--    void deleteRecord(String docname);  -->
+    <delete id="deleteRecord">
+        DELETE FROM doc_file WHERE docname = #{docname};
+    </delete>
+    <!--    void updateRecord(DocFile docFile); -->
+    <update id="updateRecord">
+        UPDATE doc_file 
+            SET docname = #{docname}, url=#{url}, username=#{username},pass=#{pass},size=#{size}
+            WHERE id=#{id};
+    </update>
+</mapper>

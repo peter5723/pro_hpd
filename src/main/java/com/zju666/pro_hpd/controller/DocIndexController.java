@@ -3,6 +3,7 @@ package com.zju666.pro_hpd.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.ibatis.jdbc.Null;
 import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -58,18 +59,19 @@ public class DocIndexController {
 
     @GetMapping("/files")
     public String getListFiles(Model model) {
-        List<DocFile> fileInfos = storageService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(DocIndexController.class, "getFile", path.getFileName().toString()).build()
-                    .toString();
+        // List<DocFile> fileInfos = storageService.loadAll().map(path -> {
+        //     String filename = path.getFileName().toString();
+        //     String url = MvcUriComponentsBuilder
+        //             .fromMethodName(DocIndexController.class, "getFile", path.getFileName().toString()).build()
+        //             .toString();
 
-            return new DocFile(filename, url);//TODO 到时候改一下，yinweis大概率不用这种方式了
-        }).collect(Collectors.toList());
+        //     return new DocFile(filename, url);//TODO 到时候改一下，因为大概率不用这种方式了
+        // }).collect(Collectors.toList());
 
-        model.addAttribute("files", fileInfos);
+        // model.addAttribute("files", fileInfos);
 
-        return "files";
+        // return "files";
+        return null;
 
     }
 
