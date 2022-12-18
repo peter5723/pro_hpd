@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class SigninController {
-    @RequestMapping({"/","/signin.html"})
+    @RequestMapping({ "/", "/signin" })
     public String signin() {
         return "signin";
     }
+
 }
