@@ -16,6 +16,8 @@ public interface FilesStorageService {
     // 加载文件
     public Resource load(String filename);
 
+    //刪除一个文件
+    public boolean delete(String filename);
     // 删除所有文件
     public void deleteAll();
 

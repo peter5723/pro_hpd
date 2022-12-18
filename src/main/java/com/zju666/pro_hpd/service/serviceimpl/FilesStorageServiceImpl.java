@@ -28,8 +28,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
-    
-    //上傳的文件
+
+    // 上傳的文件
     @Override
     public void save(MultipartFile file) {
         try {
@@ -60,6 +60,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
+    public boolean delete(String filename) {
+        try {
+            Path file = root.resolve(filename);
+            return Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
     }
@@ -72,4 +82,5 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             throw new RuntimeException("Could not load the files!");
         }
     }
+
 }

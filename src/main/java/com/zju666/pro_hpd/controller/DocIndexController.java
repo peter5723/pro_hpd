@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zju666.pro_hpd.pojo.DocFile;
 import com.zju666.pro_hpd.service.DocDbService;
@@ -49,32 +50,32 @@ public class DocIndexController {
     @PostMapping("/files/upload")
     public String uploadFile(Model model, @RequestParam("file") MultipartFile file) {
         String message = "";
-
         try {
             storageService.save(file);
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             Path path = Paths.get(file.getOriginalFilename());
-            String url = MvcUriComponentsBuilder.fromMethodName(DocIndexController.class, 
-            "getFile", path.getFileName().toString()).build().toString();
+            String url = MvcUriComponentsBuilder.fromMethodName(DocIndexController.class,
+                    "getFile", path.getFileName().toString()).build().toString();
             docDbService.insertRecord("admin", url, file);
-            
+
             model.addAttribute("message", message);
-            
+
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
             model.addAttribute("message", message);
         }
 
         return "upload_form";
-        
+
     }
 
     @GetMapping("/files")
     public String getListFiles(Model model) {
         // List<DocFile> fileInfos = storageService.loadAll().map(path -> {
-        //     String filename = path.getFileName().toString();
-        //     String url = MvcUriComponentsBuilder.fromMethodName(DocIndexController.class, "getFile", path.getFileName().toString()).build().toString();
-        //     return new DocFile(filename, url);
+        // String filename = path.getFileName().toString();
+        // String url = MvcUriComponentsBuilder.fromMethodName(DocIndexController.class,
+        // "getFile", path.getFileName().toString()).build().toString();
+        // return new DocFile(filename, url);
         // }).collect(Collectors.toList());
         List<DocFile> fileInfos = docDbService.selectAll();
         model.addAttribute("files", fileInfos);
@@ -86,7 +87,27 @@ public class DocIndexController {
         Resource file = storageService.load(filename);
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
+
+    @GetMapping("/files/delete/{filename:.+}")
+    public String deleteFile(@PathVariable String filename, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            boolean existed = storageService.delete(filename);
+
+            if (existed) {
+                redirectAttributes.addFlashAttribute("message", "Delete the file successfully: " + filename);
+                docDbService.deleteByName(filename);
+            } else {
+                redirectAttributes.addFlashAttribute("message", "The file does not exist!");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Could not delete the file: " + filename + ". Error: " + e.getMessage());
+        }
+
+        return "redirect:/files";
     }
 
 }
