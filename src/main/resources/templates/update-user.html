@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+        <title>zju666 - upload</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+      </head>
+    <body>
+        <div th:replace="fragments/header :: header"></div>
+
+  
+        <div class="container" style="max-width: 500px">
+          <h3 class="mb-3">zju666 Upload Files</h3>
+      <form action="#" th:action="@{/update/{id}(id=${docUser.id})}" th:object="${docUser}" method="post">
+        <label for="username">username</label>
+        <input type="text" th:field="*{username}" id="username" placeholder="username" required="">
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        <p>
+
+        </p>
+        <label for="password">password</label>
+        <input type="text" th:field="*{password}" id="password" placeholder="password" required="">
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <p>
+            
+        </p>
+        <input type="submit" value="Update User">   
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    </body>
+</html>
+

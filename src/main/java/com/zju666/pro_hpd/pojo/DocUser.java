@@ -1,6 +1,6 @@
 package com.zju666.pro_hpd.pojo;
-
 public class DocUser {
+    
     private Integer id;             
     private String username;        
     private String password;

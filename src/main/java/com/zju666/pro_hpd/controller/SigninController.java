@@ -28,8 +28,10 @@ public class SigninController {
             Model model) {
         List<DocUser> list1 = docUserService.selectAllUser();
         for (DocUser user : list1) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return "redirect:/files";
+            if(user.getPassword()!=null&&user.getUsername()!=null) {
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                    return "redirect:/files";
+                }
             }
         }
         model.addAttribute("msg", "用户名或者密码错误");

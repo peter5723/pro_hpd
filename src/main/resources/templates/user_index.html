@@ -33,13 +33,14 @@
                     <tr th:each="user : ${users}">
                         <td th:text="${user.username}"></td>
                         <td th:text="${user.password}"></td>
-                        <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
-                        <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
+                        <td><a th:href="@{/edit/{id}(id=${user.id})}" class="btn btn-primary" role="button">Edit</a></td>
+                        <td><a th:href="@{/delete/{id}(id=${user.id})}" class="btn btn-danger" role="button">Delete</a></td>
                     </tr>
                 </tbody>
             </table>
         </div>      
-        <p><a href="/signup">Add a new user</a></p>
+        <p><a href="/signup" class="btn btn-primary" role="button">Add a new user</a></p>
+        
     </div>
     <div th:replace="fragments/footer :: footer"></div>
 </body>
